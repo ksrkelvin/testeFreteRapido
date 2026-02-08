@@ -2,42 +2,47 @@ package main
 
 import (
 	"log"
-	"testeFreteRapido/config"
-	"testeFreteRapido/internal/adapter/controllers"
+
+	"testeFreteRapido/internal/adapter/gateways/freterapido"
+	"testeFreteRapido/internal/adapter/http"
+	"testeFreteRapido/internal/adapter/http/handlers"
 	"testeFreteRapido/internal/adapter/repositories"
-	"testeFreteRapido/internal/usecase/services"
+	"testeFreteRapido/internal/config"
+	"testeFreteRapido/internal/usecase/quote"
+	"testeFreteRapido/pkg/freteRapidoApi"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-
 	r := gin.Default()
 
-	config, err := config.New(r)
+	cfg, err := config.Load()
 	if err != nil {
-		log.Fatal("Error to init config: ", err.Error())
+		log.Fatal(err)
 	}
 
-	log.Println("Register Repository")
-	repository := repositories.NewRepository(config.DB)
-
-	log.Println("Register Service")
-	service, err := services.NewService(repository)
+	db, err := config.NewDatabase(cfg)
 	if err != nil {
-		log.Fatal("Error to init service: ", err.Error())
+		log.Fatal(err)
 	}
 
-	log.Println("Register controllers")
-	err = controllers.RegisterControllers(r, service)
+	repo := repositories.NewRepository(db)
+
+	freteClient, err := freteRapidoApi.NewClient()
 	if err != nil {
-		log.Fatal("Error registering controllers: ", err.Error())
+		log.Fatal(err)
 	}
 
-	err = r.Run(":8080")
-	if err != nil {
-		log.Fatal("Server are not running: ", err.Error())
-	}
+	freteGateway := freterapido.NewFreteGateway(freteClient)
 
-	log.Println("Server running at http://localhost:8080")
+	quoteUC := quote.NewUseCase(freteGateway, repo.Quote)
+
+	quoteHandler := handlers.NewQuoteHandler(quoteUC)
+
+	http.RegisterRoutes(r, quoteHandler)
+
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
 }

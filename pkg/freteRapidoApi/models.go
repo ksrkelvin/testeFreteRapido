@@ -1,4 +1,4 @@
-package models
+package freteRapidoApi
 
 type RequestCotacaoFreteV3 struct {
 	Shipper        Shipper             `json:"shipper"`
