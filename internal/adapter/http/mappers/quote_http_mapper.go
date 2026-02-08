@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"testeFreteRapido/internal/adapter/http/dtos"
-	"testeFreteRapido/internal/domain/interfaces"
+	"testeFreteRapido/internal/domain/entity"
 	"testeFreteRapido/internal/usecase/quote"
 
 	"github.com/go-playground/validator/v10"
@@ -28,9 +28,9 @@ func ToUseCaseInput(req dtos.QuoteRequest) (input quote.Input, err error) {
 		return quote.Input{}, err
 	}
 
-	volumes := make([]interfaces.Volume, len(req.Volumes))
+	volumes := make([]entity.VolumeEntity, len(req.Volumes))
 	for i, v := range req.Volumes {
-		volumes[i] = interfaces.Volume{
+		volumes[i] = entity.VolumeEntity{
 			Category:      v.Category,
 			Amount:        v.Amount,
 			UnitaryWeight: v.UnitaryWeight,
@@ -39,7 +39,7 @@ func ToUseCaseInput(req dtos.QuoteRequest) (input quote.Input, err error) {
 			Height:        v.Height,
 			Width:         v.Width,
 			Length:        v.Length,
-			UnitaryPrice:  v.Price,
+			UnitaryPrice:  v.UnitaryPrice,
 		}
 	}
 
@@ -49,18 +49,16 @@ func ToUseCaseInput(req dtos.QuoteRequest) (input quote.Input, err error) {
 	}, nil
 }
 
-func ToDTOOutput(quotes []interfaces.FreightQuote) dtos.QuoteResponse {
+func ToDTOQuotesOutput(quotes []entity.QuoteEntity) dtos.QuoteResponse {
 	var carriers []dtos.Carrier
 
 	for _, q := range quotes {
-		var deadline dtos.Deadline
-		deadline.Integer = &q.DeadlineDays
-		deadline.String = nil
+
 		carriers = append(carriers, dtos.Carrier{
 			Name:     q.CarrierName,
 			Service:  q.Service,
-			Deadline: &deadline,
-			Price:    q.FinalPrice,
+			Deadline: strconv.Itoa(int(q.DeadlineDays)),
+			Price:    q.Price,
 		})
 	}
 

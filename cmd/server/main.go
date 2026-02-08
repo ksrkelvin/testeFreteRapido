@@ -43,7 +43,7 @@ func main() {
 	quoteUC := quote.NewUseCase(freteGateway, repo.Quote)
 	quoteHandler := handlers.NewQuoteHandler(quoteUC)
 
-	metricsUC := metrics.NewUseCase(repo.Quote)
+	metricsUC := metrics.NewUseCase(repo.Metrics)
 	metricsHandler := handlers.NewMetricsHandler(metricsUC)
 
 	http.RegisterRoutes(r, quoteHandler, metricsHandler)

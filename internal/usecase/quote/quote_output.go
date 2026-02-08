@@ -1,7 +1,7 @@
 package quote
 
-import "testeFreteRapido/internal/domain/interfaces"
+import "testeFreteRapido/internal/domain/entity"
 
 type Output struct {
-	Quotes []interfaces.FreightQuote
+	Quotes []entity.QuoteEntity
 }

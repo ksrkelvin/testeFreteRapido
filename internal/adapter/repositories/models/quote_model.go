@@ -2,12 +2,12 @@ package models
 
 import "gorm.io/gorm"
 
-type QuoteModel struct {
+type Quote struct {
 	gorm.Model
-	Carrier []CarrierModel `gorm:"foreignKey:QuoteID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Carriers []Carrier `gorm:"foreignKey:QuoteID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
-type CarrierModel struct {
+type Carrier struct {
 	gorm.Model
 	QuoteID  uint
 	Name     string  `gorm:"type:varchar(100);not null"`

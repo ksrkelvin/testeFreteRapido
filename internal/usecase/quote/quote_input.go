@@ -1,8 +1,8 @@
 package quote
 
-import "testeFreteRapido/internal/domain/interfaces"
+import "testeFreteRapido/internal/domain/entity"
 
 type Input struct {
 	RecipientZip int32
-	Volumes      []interfaces.Volume
+	Volumes      []entity.VolumeEntity
 }

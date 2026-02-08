@@ -1,7 +1,7 @@
 package interfaces
 
-import "testeFreteRapido/internal/domain/models"
+import "testeFreteRapido/internal/domain/entity"
 
 type QuoteRepository interface {
-	SaveQuote(data *models.QuoteModel) (err error)
+	SaveQuote(quotes []entity.QuoteEntity) (err error)
 }

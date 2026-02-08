@@ -8,11 +8,13 @@ import (
 )
 
 type Repository struct {
-	Quote interfaces.QuoteRepository
+	Quote   interfaces.QuoteRepository
+	Metrics interfaces.MetricRepository
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
-		Quote: postgres.NewQuoteRepository(db),
+		Quote:   postgres.NewQuoteRepository(db),
+		Metrics: postgres.NewMetricsRepository(db),
 	}
 }

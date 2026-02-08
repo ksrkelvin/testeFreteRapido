@@ -2,20 +2,20 @@ package freterapido
 
 import (
 	"strconv"
-	"testeFreteRapido/internal/domain/interfaces"
+	"testeFreteRapido/internal/domain/entity"
 	"testeFreteRapido/pkg/freteRapidoApi"
 )
 
-func adaptResponse(resp freteRapidoApi.ResponseCotacaoFreteV3) []interfaces.FreightQuote {
-	var quotes []interfaces.FreightQuote
+func adaptResponse(resp freteRapidoApi.ResponseCotacaoFreteV3) []entity.QuoteEntity {
+	var quotes []entity.QuoteEntity
 
 	for _, dispatcher := range resp.Dispatchers {
 		for _, offer := range dispatcher.Offers {
-			quotes = append(quotes, interfaces.FreightQuote{
+			quotes = append(quotes, entity.QuoteEntity{
 				CarrierName:  offer.Carrier.Name,
 				Service:      offer.Service,
-				DeadlineDays: offer.DeliveryTime.Days,
-				FinalPrice:   offer.FinalPrice,
+				DeadlineDays: int(offer.DeliveryTime.Days),
+				Price:        offer.FinalPrice,
 			})
 		}
 	}
@@ -23,7 +23,7 @@ func adaptResponse(resp freteRapidoApi.ResponseCotacaoFreteV3) []interfaces.Frei
 	return quotes
 }
 
-func adaptVolumes(vols []interfaces.Volume) []freteRapidoApi.Volume {
+func adaptVolumes(vols []entity.VolumeEntity) []freteRapidoApi.Volume {
 	result := make([]freteRapidoApi.Volume, len(vols))
 	for i, v := range vols {
 		result[i] = freteRapidoApi.Volume{

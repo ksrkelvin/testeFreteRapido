@@ -2,15 +2,15 @@ package migrations
 
 import (
 	"log"
-	"testeFreteRapido/internal/domain/models"
+	"testeFreteRapido/internal/adapter/repositories/models"
 
 	"gorm.io/gorm"
 )
 
 func Migrate(db *gorm.DB) {
 	err := db.AutoMigrate(
-		&models.QuoteModel{},
-		&models.CarrierModel{},
+		&models.Quote{},
+		&models.Carrier{},
 	)
 	if err != nil {
 		log.Fatalf("Falha ao migrar banco: %v", err)

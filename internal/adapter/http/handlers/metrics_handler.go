@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"net/http"
 	"testeFreteRapido/internal/usecase/metrics"
+	"testeFreteRapido/pkg/httpx"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,11 +16,9 @@ func NewMetricsHandler(uc *metrics.UseCase) *MetricsHandler {
 }
 
 func (h *MetricsHandler) Metrics(c *gin.Context) {
-	err := h.usecase.Execute(c.Request.Context())
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+	param := c.Query("last_quotes")
 
-	c.JSON(http.StatusOK, nil)
+	out, err := h.usecase.Execute(c.Request.Context(), param)
+	status, body := httpx.FromResult(out, err)
+	c.JSON(status, body)
 }
