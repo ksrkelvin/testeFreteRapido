@@ -1,6 +1,10 @@
 package postgres
 
-import "gorm.io/gorm"
+import (
+	"testeFreteRapido/internal/domain/models"
+
+	"gorm.io/gorm"
+)
 
 type QuoteRepository struct {
 	db *gorm.DB
@@ -12,6 +16,11 @@ func NewQuoteRepository(db *gorm.DB) *QuoteRepository {
 	}
 }
 
-func (r *QuoteRepository) SaveQuote(data any) error {
-	return nil
+func (r *QuoteRepository) SaveQuote(data *models.QuoteModel) error {
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(data).Error; err != nil {
+			return err
+		}
+		return nil
+	})
 }

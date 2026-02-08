@@ -7,6 +7,7 @@ import (
 	"testeFreteRapido/internal/adapter/http"
 	"testeFreteRapido/internal/adapter/http/handlers"
 	"testeFreteRapido/internal/adapter/repositories"
+	"testeFreteRapido/internal/adapter/repositories/migrations"
 	"testeFreteRapido/internal/config"
 	"testeFreteRapido/internal/usecase/quote"
 	"testeFreteRapido/pkg/freteRapidoApi"
@@ -26,6 +27,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	migrations.Migrate(db)
 
 	repo := repositories.NewRepository(db)
 

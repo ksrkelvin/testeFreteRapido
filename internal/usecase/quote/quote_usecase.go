@@ -2,6 +2,7 @@ package quote
 
 import (
 	"context"
+	"testeFreteRapido/internal/adapter/repositories/mappers"
 	"testeFreteRapido/internal/domain/interfaces"
 )
 
@@ -26,8 +27,12 @@ func (uc *UseCase) Execute(ctx context.Context, input Input) (*Output, error) {
 		return nil, err
 	}
 
-	// Aqui você pode salvar no banco se quiser:
-	// uc.quoteRepo.Save(...)
+	quoteModel := mappers.MapFreightQuotesToModel(quotes)
+
+	err = uc.quoteRepo.SaveQuote(quoteModel)
+	if err != nil {
+		return nil, err
+	}
 
 	return &Output{Quotes: quotes}, nil
 }
