@@ -9,6 +9,7 @@ import (
 	"testeFreteRapido/internal/adapter/repositories"
 	"testeFreteRapido/internal/adapter/repositories/migrations"
 	"testeFreteRapido/internal/config"
+	"testeFreteRapido/internal/usecase/metrics"
 	"testeFreteRapido/internal/usecase/quote"
 	"testeFreteRapido/pkg/freteRapidoApi"
 
@@ -40,10 +41,12 @@ func main() {
 	freteGateway := freterapido.NewFreteGateway(freteClient)
 
 	quoteUC := quote.NewUseCase(freteGateway, repo.Quote)
-
 	quoteHandler := handlers.NewQuoteHandler(quoteUC)
 
-	http.RegisterRoutes(r, quoteHandler)
+	metricsUC := metrics.NewUseCase(repo.Quote)
+	metricsHandler := handlers.NewMetricsHandler(metricsUC)
+
+	http.RegisterRoutes(r, quoteHandler, metricsHandler)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)

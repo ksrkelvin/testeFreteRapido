@@ -9,6 +9,8 @@ import (
 func RegisterRoutes(
 	r *gin.Engine,
 	quoteHandler *handlers.QuoteHandler,
+	metricsHandler *handlers.MetricsHandler,
 ) {
 	r.POST("/quote", quoteHandler.Quote)
+	r.POST("/metrics", metricsHandler.Metrics)
 }
