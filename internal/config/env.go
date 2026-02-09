@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -9,7 +10,7 @@ import (
 
 func Load() (config *Config, err error) {
 	if err := godotenv.Load(); err != nil {
-		return nil, fmt.Errorf("failed to load .env file: %w", err)
+		log.Printf("No .env file found: %v", err)
 	}
 	cfg := &Config{
 		DBConnURL: os.Getenv("DB_CONN_URL"),
