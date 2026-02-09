@@ -2,7 +2,7 @@ package httpx
 
 import "net/http"
 
-func NotFound(message, description string) *AppError {
+func NotFound(message, description string) (appError *AppError) {
 	return &AppError{
 		Status:      http.StatusNotFound,
 		Code:        "NOT_FOUND",
@@ -11,7 +11,7 @@ func NotFound(message, description string) *AppError {
 	}
 }
 
-func InvalidInput(message, description string) *AppError {
+func InvalidInput(message, description string) (appError *AppError) {
 	return &AppError{
 		Status:      http.StatusBadRequest,
 		Code:        "INVALID_INPUT",
@@ -20,7 +20,7 @@ func InvalidInput(message, description string) *AppError {
 	}
 }
 
-func Conflict(message, description string) *AppError {
+func Conflict(message, description string) (appError *AppError) {
 	return &AppError{
 		Status:      http.StatusConflict,
 		Code:        "CONFLICT",
@@ -29,7 +29,7 @@ func Conflict(message, description string) *AppError {
 	}
 }
 
-func Unauthorized(message, description string) *AppError {
+func Unauthorized(message, description string) (appError *AppError) {
 	return &AppError{
 		Status:      http.StatusUnauthorized,
 		Code:        "UNAUTHORIZED",
@@ -38,7 +38,7 @@ func Unauthorized(message, description string) *AppError {
 	}
 }
 
-func Internal(err error) *AppError {
+func Internal(err error) (appError *AppError) {
 	return &AppError{
 		Status:  http.StatusInternalServerError,
 		Code:    "INTERNAL_ERROR",

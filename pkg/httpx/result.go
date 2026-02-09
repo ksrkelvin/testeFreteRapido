@@ -2,7 +2,7 @@ package httpx
 
 import "net/http"
 
-func FromResult(data any, err error) (int, any) {
+func FromResult(data any, err error) (statusCode int, response any) {
 	if err == nil {
 		if data == nil {
 			return http.StatusNoContent, nil
