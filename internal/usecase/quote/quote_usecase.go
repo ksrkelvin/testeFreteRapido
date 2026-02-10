@@ -28,10 +28,7 @@ func (uc *UseCase) Execute(
 
 	quotes, err := uc.gateway.Quote(ctx, input.RecipientZip, input.Volumes)
 	if err != nil {
-		return nil, httpx.InvalidInput(
-			"failed to quote freight",
-			err.Error(),
-		)
+		return nil, err
 	}
 
 	if len(quotes) == 0 {
@@ -42,10 +39,7 @@ func (uc *UseCase) Execute(
 	}
 
 	if err := uc.repo.SaveQuote(quotes); err != nil {
-		return nil, httpx.Conflict(
-			"failed to save quote",
-			err.Error(),
-		)
+		return nil, err
 	}
 
 	return &Output{

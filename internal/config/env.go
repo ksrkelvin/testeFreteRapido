@@ -13,21 +13,14 @@ func Load() (config *Config, err error) {
 		log.Printf("No .env file found: %v", err)
 	}
 	cfg := &Config{
-		DBConnURL: os.Getenv("DB_CONN_URL"),
-
-		Host:          os.Getenv("FRETE_RAPIDO_API_HOST"),
-		AuthToken:     os.Getenv("FRETE_RAPIDO_API_AUTH_TOKEN"),
-		PlataformCode: os.Getenv("FRETE_RAPIDO_API_PLATAFORM_CODE"),
-		RegisteredNum: os.Getenv("FRETE_RAPIDO_API_REGISTERED_NUMBER"),
-		DispatcherZip: os.Getenv("FRETE_RAPIDO_API_DISPATCHER_ZIP_CODE"),
+		DBConnURL:        os.Getenv("DB_CONN_URL"),
+		AuthToken:        os.Getenv("FRETE_RAPIDO_API_AUTH_TOKEN"),
+		PlataformCode:    os.Getenv("FRETE_RAPIDO_API_PLATAFORM_CODE"),
+		RegisteredNumber: REGISTERED_NUMBER,
 	}
 
 	if cfg.DBConnURL == "" {
 		return nil, fmt.Errorf("DB_CONN_URL is required")
-	}
-
-	if cfg.Host == "" {
-		return nil, fmt.Errorf("FRETE_RAPIDO_API_HOST is required")
 	}
 
 	if cfg.AuthToken == "" {
@@ -37,14 +30,5 @@ func Load() (config *Config, err error) {
 	if cfg.PlataformCode == "" {
 		return nil, fmt.Errorf("FRETE_RAPIDO_API_PLATAFORM_CODE is required")
 	}
-
-	if cfg.RegisteredNum == "" {
-		return nil, fmt.Errorf("FRETE_RAPIDO_API_REGISTERED_NUMBER is required")
-	}
-
-	if cfg.DispatcherZip == "" {
-		return nil, fmt.Errorf("FRETE_RAPIDO_API_DISPATCHER_ZIP_CODE is required")
-	}
-
 	return cfg, nil
 }

@@ -1,20 +1,20 @@
 package httpx
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func NotFound(message, description string) (appError *AppError) {
 	return &AppError{
-		Status:      http.StatusNotFound,
-		Code:        "NOT_FOUND",
+		StatusCode:  http.StatusNotFound,
 		Message:     message,
 		Description: description,
 	}
 }
 
-func InvalidInput(message, description string) (appError *AppError) {
+func BadRequest(message, description string) (appError *AppError) {
 	return &AppError{
-		Status:      http.StatusBadRequest,
-		Code:        "INVALID_INPUT",
+		StatusCode:  http.StatusBadRequest,
 		Message:     message,
 		Description: description,
 	}
@@ -22,17 +22,7 @@ func InvalidInput(message, description string) (appError *AppError) {
 
 func Conflict(message, description string) (appError *AppError) {
 	return &AppError{
-		Status:      http.StatusConflict,
-		Code:        "CONFLICT",
-		Message:     message,
-		Description: description,
-	}
-}
-
-func Unauthorized(message, description string) (appError *AppError) {
-	return &AppError{
-		Status:      http.StatusUnauthorized,
-		Code:        "UNAUTHORIZED",
+		StatusCode:  http.StatusConflict,
 		Message:     message,
 		Description: description,
 	}
@@ -40,9 +30,24 @@ func Unauthorized(message, description string) (appError *AppError) {
 
 func Internal(err error) (appError *AppError) {
 	return &AppError{
-		Status:  http.StatusInternalServerError,
-		Code:    "INTERNAL_ERROR",
-		Message: "internal server error",
-		Err:     err,
+		StatusCode:  http.StatusInternalServerError,
+		Message:     "internal server error",
+		Description: err.Error(),
+	}
+}
+
+func ServiceUnavailable(message, description string) *AppError {
+	return &AppError{
+		StatusCode:  http.StatusServiceUnavailable,
+		Message:     message,
+		Description: description,
+	}
+}
+
+func BadGateway(message, description string) *AppError {
+	return &AppError{
+		StatusCode:  http.StatusBadGateway,
+		Message:     message,
+		Description: description,
 	}
 }

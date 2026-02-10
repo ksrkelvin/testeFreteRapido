@@ -19,20 +19,21 @@ func (g *Gateway) Quote(
 	ctx context.Context,
 	recipientZip int32,
 	volumes []entity.VolumeEntity,
-) ([]entity.QuoteEntity, error) {
+) (quotes []entity.QuoteEntity, err error) {
 
 	dispatchers := []freteRapidoApi.DispatcherRequest{
 		{
 			RegisteredNumber: g.client.RegisteredNumber,
-			Zipcode:          recipientZip,
+			Zipcode:          DISPATCHER_ZIP_CODE,
 			Volumes:          adaptVolumes(volumes),
 		},
 	}
 
 	recipient := freteRapidoApi.Recipient{Zipcode: int64(recipientZip)}
 
-	resp, err := g.client.QuoteV3(recipient, dispatchers)
+	resp, err := g.client.QuoteV3(ctx, recipient, dispatchers)
 	if err != nil {
+		err = adaptError(err)
 		return nil, err
 	}
 

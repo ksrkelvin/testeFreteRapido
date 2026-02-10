@@ -31,7 +31,7 @@ func (r *MetricsRepository) ReadQuotes(lastQuotes string) ([]entity.QuoteEntity,
 	if lastQuotes != "" {
 		limit, err := strconv.Atoi(lastQuotes)
 		if err != nil {
-			return nil, httpx.InvalidInput(
+			return nil, httpx.BadRequest(
 				"invalid lastQuotes parameter",
 				"lastQuotes must be a valid integer",
 			)

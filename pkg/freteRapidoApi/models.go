@@ -88,3 +88,8 @@ type Shipper struct {
 	Token            string `json:"token"`
 	PlatformCode     string `json:"platform_code"`
 }
+
+type ErrorResponse struct {
+	Details []any  `json:"details"`
+	Error   string `json:"error"`
+}

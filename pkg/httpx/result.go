@@ -15,8 +15,7 @@ func FromResult(data any, err error) (statusCode int, response any) {
 		appErr = Internal(err)
 	}
 
-	return appErr.Status, ErrorResponse{
-		Code:        appErr.Code,
+	return appErr.StatusCode, ErrorResponse{
 		Message:     appErr.Message,
 		Description: appErr.Description,
 	}

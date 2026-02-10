@@ -20,13 +20,6 @@ func NewQuoteRepository(db *gorm.DB) *QuoteRepository {
 }
 
 func (r *QuoteRepository) SaveQuote(data []entity.QuoteEntity) error {
-	if len(data) == 0 {
-		return httpx.InvalidInput(
-			"empty quote data",
-			"at least one quote must be provided to save",
-		)
-	}
-
 	quoteModel := mappers.MapFreightQuotesToModel(data)
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {

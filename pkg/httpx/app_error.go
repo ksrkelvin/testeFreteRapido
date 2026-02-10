@@ -1,11 +1,9 @@
 package httpx
 
 type AppError struct {
-	Status      int
-	Code        string
+	StatusCode  int
 	Message     string
 	Description string
-	Err         error
 }
 
 func (e *AppError) Error() string {

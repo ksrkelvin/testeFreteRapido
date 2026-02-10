@@ -23,7 +23,7 @@ func (h *QuoteHandler) Quote(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		status, body := httpx.FromResult(
 			nil,
-			httpx.InvalidInput("invalid request body", err.Error()),
+			httpx.BadRequest("invalid request body", err.Error()),
 		)
 		c.JSON(status, body)
 		return
@@ -33,7 +33,7 @@ func (h *QuoteHandler) Quote(c *gin.Context) {
 	if err != nil {
 		status, body := httpx.FromResult(
 			nil,
-			httpx.InvalidInput("invalid request data", err.Error()),
+			httpx.BadRequest("invalid request data", err.Error()),
 		)
 		c.JSON(status, body)
 		return

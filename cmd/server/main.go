@@ -33,7 +33,7 @@ func main() {
 
 	repo := repositories.NewRepository(db)
 
-	freteClient, err := freteRapidoApi.NewClient()
+	freteClient, err := freteRapidoApi.NewClient(cfg.AuthToken, cfg.PlataformCode, cfg.RegisteredNumber)
 	if err != nil {
 		log.Fatal(err)
 	}

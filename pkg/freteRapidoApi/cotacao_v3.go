@@ -1,12 +1,12 @@
 package freteRapidoApi
 
 import (
+	"context"
 	"encoding/json"
-	"fmt"
-	"net/http"
 )
 
 func (c *Client) QuoteV3(
+	ctx context.Context,
 	recipient Recipient,
 	dispatchers []DispatcherRequest,
 ) (response ResponseCotacaoFreteV3, err error) {
@@ -29,13 +29,13 @@ func (c *Client) QuoteV3(
 		"Accept":       "application/json",
 	}
 
-	body, status, err := c.HTTP.Post("/api/v3/quote/simulate", headers, payload)
+	body, status, err := c.HTTP.Post(ctx, QUOTE_V3_PATH, headers, payload)
 	if err != nil {
 		return ResponseCotacaoFreteV3{}, err
 	}
 
-	if status != http.StatusOK {
-		return ResponseCotacaoFreteV3{}, fmt.Errorf("frete rapido error: %s", body)
+	if status != 200 {
+		return ResponseCotacaoFreteV3{}, MapError(status, err)
 	}
 
 	err = json.Unmarshal(body, &response)
