@@ -12,5 +12,5 @@ func RegisterRoutes(
 	metricsHandler *handlers.MetricsHandler,
 ) {
 	r.POST("/quote", quoteHandler.Quote)
-	r.POST("/metrics", metricsHandler.Metrics)
+	r.GET("/metrics", metricsHandler.Metrics)
 }

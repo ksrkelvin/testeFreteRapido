@@ -18,7 +18,7 @@ func NewQuoteHandler(uc *quote.UseCase) *QuoteHandler {
 }
 
 func (h *QuoteHandler) Quote(c *gin.Context) {
-	var req dtos.QuoteRequest
+	var req dtos.QuoteRequestDTO
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		status, body := httpx.FromResult(

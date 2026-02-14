@@ -1,19 +1,19 @@
 package dtos
 
-type QuoteRequest struct {
-	Recipient Recipient `json:"recipient" validate:"required"`
-	Volumes   []Volume  `json:"volumes" validate:"required,dive"`
+type QuoteRequestDTO struct {
+	Recipient RecipientDTO `json:"recipient" validate:"required"`
+	Volumes   []VolumeDTO  `json:"volumes" validate:"required,dive"`
 }
 
-type Recipient struct {
-	Address Address `json:"address" validate:"required"`
+type RecipientDTO struct {
+	Address AddressDTO `json:"address" validate:"required"`
 }
 
-type Address struct {
+type AddressDTO struct {
 	Zipcode string `json:"zipcode" validate:"required"`
 }
 
-type Volume struct {
+type VolumeDTO struct {
 	Category      int64   `json:"category" validate:"required,gt=0"`
 	Amount        float64 `json:"amount" validate:"required,gt=0"`
 	UnitaryWeight int64   `json:"unitary_weight" validate:"required,gt=0"`

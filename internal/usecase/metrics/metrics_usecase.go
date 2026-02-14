@@ -1,4 +1,3 @@
-// internal/usecase/metrics/metrics_usecase.go
 package metrics
 
 import (

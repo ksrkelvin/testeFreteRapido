@@ -5,8 +5,8 @@ import (
 	"testeFreteRapido/internal/usecase/metrics"
 )
 
-func ToMetricsResponse(out *metrics.Output) dtos.MetricsResponse {
-	var carrierMetrics []dtos.CarrierMetrics
+func ToMetricsResponse(out *metrics.Output) dtos.MetricsResponseDTO {
+	var carrierMetrics []dtos.CarrierMetricsDTO
 
 	for _, data := range out.CarrierMetrics {
 		avg := 0.0
@@ -14,7 +14,7 @@ func ToMetricsResponse(out *metrics.Output) dtos.MetricsResponse {
 			avg = data.TotalPrice / float64(data.TotalQuotes)
 		}
 
-		carrierMetrics = append(carrierMetrics, dtos.CarrierMetrics{
+		carrierMetrics = append(carrierMetrics, dtos.CarrierMetricsDTO{
 			CarrierName:  data.CarrierName,
 			TotalQuotes:  data.TotalQuotes,
 			TotalPrice:   data.TotalPrice,
@@ -22,13 +22,13 @@ func ToMetricsResponse(out *metrics.Output) dtos.MetricsResponse {
 		})
 	}
 
-	return dtos.MetricsResponse{
+	return dtos.MetricsResponseDTO{
 		CarrierMetrics: carrierMetrics,
-		CheapestCarrier: dtos.QuoteMetrics{
+		CheapestCarrier: dtos.QuoteMetricsDTO{
 			CarrierName: out.CheapestCarrier.CarrierName,
 			Price:       out.CheapestCarrier.Price,
 		},
-		ExpensiveCarrier: dtos.QuoteMetrics{
+		ExpensiveCarrier: dtos.QuoteMetricsDTO{
 			CarrierName: out.ExpensiveCarrier.CarrierName,
 			Price:       out.ExpensiveCarrier.Price,
 		},

@@ -29,6 +29,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	r.SetTrustedProxies(nil)
+
 	migrations.Migrate(db)
 
 	repo := repositories.NewRepository(db)

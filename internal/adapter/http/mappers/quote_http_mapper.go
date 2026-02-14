@@ -12,7 +12,7 @@ import (
 
 var validate = validator.New()
 
-func ToUseCaseInput(req dtos.QuoteRequest) (input quote.Input, err error) {
+func ToUseCaseInput(req dtos.QuoteRequestDTO) (input quote.Input, err error) {
 	if err := validate.Struct(req); err != nil {
 		if _, ok := err.(*validator.InvalidValidationError); ok {
 			return quote.Input{}, err
@@ -49,12 +49,12 @@ func ToUseCaseInput(req dtos.QuoteRequest) (input quote.Input, err error) {
 	}, nil
 }
 
-func ToDTOQuotesOutput(quotes []entity.QuoteEntity) dtos.QuoteResponse {
-	var carriers []dtos.Carrier
+func ToDTOQuotesOutput(quotes []entity.QuoteEntity) dtos.QuoteResponseDTO {
+	var carriers []dtos.CarrierDTO
 
 	for _, q := range quotes {
 
-		carriers = append(carriers, dtos.Carrier{
+		carriers = append(carriers, dtos.CarrierDTO{
 			Name:     q.CarrierName,
 			Service:  q.Service,
 			Deadline: strconv.Itoa(int(q.DeadlineDays)),
@@ -62,7 +62,7 @@ func ToDTOQuotesOutput(quotes []entity.QuoteEntity) dtos.QuoteResponse {
 		})
 	}
 
-	return dtos.QuoteResponse{
+	return dtos.QuoteResponseDTO{
 		Carrier: carriers,
 	}
 }

@@ -1,10 +1,10 @@
 package dtos
 
-type QuoteResponse struct {
-	Carrier []Carrier `json:"carrier"`
+type QuoteResponseDTO struct {
+	Carrier []CarrierDTO `json:"carrier"`
 }
 
-type Carrier struct {
+type CarrierDTO struct {
 	Name     string  `json:"name"`
 	Service  string  `json:"service"`
 	Deadline string  `json:"deadline"`
