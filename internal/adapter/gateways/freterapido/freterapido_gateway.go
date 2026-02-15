@@ -7,12 +7,27 @@ import (
 	"testeFreteRapido/pkg/freteRapidoApi"
 )
 
-type Gateway struct {
-	client *freteRapidoApi.Client
+type freteClient interface {
+	QuoteV3(
+		ctx context.Context,
+		recipient freteRapidoApi.Recipient,
+		dispatchers []freteRapidoApi.DispatcherRequest,
+	) (freteRapidoApi.ResponseCotacaoFreteV3, error)
+	GetRegisteredNumber() string
 }
 
-func NewFreteGateway(client *freteRapidoApi.Client) interfaces.QuoteGateway {
-	return &Gateway{client: client}
+type Gateway struct {
+	client           freteClient
+	registeredNumber string
+}
+
+func NewFreteGateway(
+	client freteClient,
+) interfaces.QuoteGateway {
+	return &Gateway{
+		client:           client,
+		registeredNumber: client.GetRegisteredNumber(),
+	}
 }
 
 func (g *Gateway) Quote(
@@ -23,7 +38,7 @@ func (g *Gateway) Quote(
 
 	dispatchers := []freteRapidoApi.DispatcherRequest{
 		{
-			RegisteredNumber: g.client.RegisteredNumber,
+			RegisteredNumber: g.registeredNumber,
 			Zipcode:          DISPATCHER_ZIP_CODE,
 			Volumes:          adaptVolumes(volumes),
 		},
@@ -38,4 +53,8 @@ func (g *Gateway) Quote(
 	}
 
 	return adaptResponse(resp), nil
+}
+
+func (g *Gateway) GetRegisteredNumber() string {
+	return g.client.GetRegisteredNumber()
 }

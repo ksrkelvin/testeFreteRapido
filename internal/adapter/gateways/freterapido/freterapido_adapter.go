@@ -44,6 +44,9 @@ func adaptVolumes(vols []entity.VolumeEntity) []freteRapidoApi.Volume {
 }
 
 func adaptError(err error) error {
+	if err == nil {
+		return nil
+	}
 	var apiErr *freteRapidoApi.APIError
 
 	if !errors.As(err, &apiErr) {

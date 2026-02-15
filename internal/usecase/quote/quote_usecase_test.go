@@ -11,20 +11,23 @@ import (
 func TestUseCase_Execute(t *testing.T) {
 	tests := []struct {
 		name    string
-		gateway *quote.MockGateway
-		repo    *quote.MockRepository
+		gateway *MockGateway
+		repo    *MockRepository
 		input   quote.Input
 		want    *quote.Output
 		wantErr bool
 	}{
 		{
 			name: "gateway returns error",
-			gateway: &quote.MockGateway{
+			gateway: &MockGateway{
 				QuoteFunc: func(ctx context.Context, zip int32, volumes []entity.VolumeEntity) ([]entity.QuoteEntity, error) {
 					return nil, errors.New("gateway error")
 				},
+				GetRegisteredNumberFunc: func() string {
+					return "12345678000199"
+				},
 			},
-			repo: &quote.MockRepository{
+			repo: &MockRepository{
 				SaveQuoteFunc: func(quotes []entity.QuoteEntity) error {
 					return nil
 				},
@@ -34,12 +37,15 @@ func TestUseCase_Execute(t *testing.T) {
 		},
 		{
 			name: "no quotes returned",
-			gateway: &quote.MockGateway{
+			gateway: &MockGateway{
 				QuoteFunc: func(ctx context.Context, zip int32, volumes []entity.VolumeEntity) ([]entity.QuoteEntity, error) {
 					return []entity.QuoteEntity{}, nil
 				},
+				GetRegisteredNumberFunc: func() string {
+					return "12345678000199"
+				},
 			},
-			repo: &quote.MockRepository{
+			repo: &MockRepository{
 				SaveQuoteFunc: func(quotes []entity.QuoteEntity) error {
 					return nil
 				},
@@ -49,14 +55,17 @@ func TestUseCase_Execute(t *testing.T) {
 		},
 		{
 			name: "repository returns error",
-			gateway: &quote.MockGateway{
+			gateway: &MockGateway{
 				QuoteFunc: func(ctx context.Context, zip int32, volumes []entity.VolumeEntity) ([]entity.QuoteEntity, error) {
 					return []entity.QuoteEntity{
 						{CarrierName: "Correios", Price: 20},
 					}, nil
 				},
+				GetRegisteredNumberFunc: func() string {
+					return "12345678000199"
+				},
 			},
-			repo: &quote.MockRepository{
+			repo: &MockRepository{
 				SaveQuoteFunc: func(quotes []entity.QuoteEntity) error {
 					return errors.New("db error")
 				},
@@ -66,14 +75,17 @@ func TestUseCase_Execute(t *testing.T) {
 		},
 		{
 			name: "success",
-			gateway: &quote.MockGateway{
+			gateway: &MockGateway{
 				QuoteFunc: func(ctx context.Context, zip int32, volumes []entity.VolumeEntity) ([]entity.QuoteEntity, error) {
 					return []entity.QuoteEntity{
 						{CarrierName: "Correios", Price: 20},
 					}, nil
 				},
+				GetRegisteredNumberFunc: func() string {
+					return "12345678000199"
+				},
 			},
-			repo: &quote.MockRepository{
+			repo: &MockRepository{
 				SaveQuoteFunc: func(quotes []entity.QuoteEntity) error {
 					return nil
 				},

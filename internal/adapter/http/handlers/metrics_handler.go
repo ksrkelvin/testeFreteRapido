@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"testeFreteRapido/internal/adapter/http/mappers"
 	"testeFreteRapido/internal/usecase/metrics"
 	"testeFreteRapido/pkg/httpx"
@@ -8,11 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type MetricsHandler struct {
-	usecase *metrics.UseCase
+type MetricsUsecase interface {
+	Execute(ctx context.Context, lastQuotes string) (*metrics.Output, error)
 }
 
-func NewMetricsHandler(uc *metrics.UseCase) *MetricsHandler {
+type MetricsHandler struct {
+	usecase MetricsUsecase
+}
+
+func NewMetricsHandler(uc MetricsUsecase) *MetricsHandler {
 	return &MetricsHandler{usecase: uc}
 }
 

@@ -11,4 +11,5 @@ type QuoteGateway interface {
 		recipientZip int32,
 		volumes []entity.VolumeEntity,
 	) (quoteEntity []entity.QuoteEntity, err error)
+	GetRegisteredNumber() string
 }

@@ -6,8 +6,7 @@ import (
 )
 
 func MapQuoteModelsToEntities(modelsQuotes []models.Quote) []entity.QuoteEntity {
-	var entities []entity.QuoteEntity
-
+	entities := make([]entity.QuoteEntity, 0)
 	for _, quote := range modelsQuotes {
 		for _, carrier := range quote.Carriers {
 			entities = append(entities, entity.QuoteEntity{

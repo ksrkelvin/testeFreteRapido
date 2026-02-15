@@ -8,26 +8,28 @@ import (
 	"time"
 )
 
-type httpClient struct {
+type httpClient interface {
+	Post(ctx context.Context, path string, headers map[string]string, body []byte) ([]byte, int, error)
+}
+
+type HTTPClient struct {
 	baseURL string
 	client  *http.Client
 }
 
-func newHTTPClient(baseURL string, timeout time.Duration) *httpClient {
-	return &httpClient{
+func NewHTTPClient(baseURL string, timeout time.Duration) httpClient {
+	return &HTTPClient{
 		baseURL: baseURL,
-		client: &http.Client{
-			Timeout: timeout,
-		},
+		client:  &http.Client{Timeout: timeout},
 	}
 }
 
-func (h *httpClient) Post(
+func (h *HTTPClient) Post(
 	ctx context.Context,
 	path string,
 	headers map[string]string,
 	body []byte,
-) ([]byte, int, error) {
+) (response []byte, status int, err error) {
 
 	req, err := http.NewRequestWithContext(
 		ctx,

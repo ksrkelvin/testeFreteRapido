@@ -1,4 +1,4 @@
-package quote
+package quote_test
 
 import (
 	"context"
@@ -11,10 +11,15 @@ type MockGateway struct {
 		recipientZip int32,
 		volumes []entity.VolumeEntity,
 	) (quoteEntity []entity.QuoteEntity, err error)
+	GetRegisteredNumberFunc func() string
 }
 
 func (m *MockGateway) Quote(ctx context.Context, zip int32, volumes []entity.VolumeEntity) ([]entity.QuoteEntity, error) {
 	return m.QuoteFunc(ctx, zip, volumes)
+}
+
+func (m *MockGateway) GetRegisteredNumber() string {
+	return m.GetRegisteredNumberFunc()
 }
 
 type MockRepository struct {

@@ -6,7 +6,7 @@ type Client struct {
 	RegisteredNumber string
 	AuthToken        string
 	PlatformCode     string
-	HTTP             *httpClient
+	HTTP             httpClient
 }
 
 func NewClient(authToken string, platformCode string, registeredNumber string) (*Client, error) {
@@ -14,9 +14,13 @@ func NewClient(authToken string, platformCode string, registeredNumber string) (
 		RegisteredNumber: registeredNumber,
 		AuthToken:        authToken,
 		PlatformCode:     platformCode,
-		HTTP: newHTTPClient(
+		HTTP: NewHTTPClient(
 			HOST_FRETE_RAPIDO,
 			5*time.Second,
 		),
 	}, nil
+}
+
+func (c *Client) GetRegisteredNumber() string {
+	return c.RegisteredNumber
 }
