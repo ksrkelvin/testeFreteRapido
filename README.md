@@ -133,8 +133,10 @@ A aplicação é **containerizada** usando Docker. Todos os comandos abaixo deve
 Esse projeto precisa das seguintes variaveis de ambiente 
 
 ```env
+DB_CONN_URL=postgresql://postgres:postgres@localhost:5432/testeFreteRapido
 FRETE_RAPIDO_API_AUTH_TOKEN= (Usar Token de autenticação da API frete Rápido)
 FRETE_RAPIDO_API_PLATAFORM_CODE= (Usar Código da Plataforma da API frete Rápido)
+REGISTERED_NUMBER = 25438296000158
 
 ```
 ---
