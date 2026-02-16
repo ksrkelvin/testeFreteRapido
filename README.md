@@ -169,7 +169,7 @@ C:.
 ├───cmd
 │   └───server
 │           main.go
-│           __debug_bin.exe
+│           main_test.go
 │
 ├───docker
 │       docker-compose.yml
@@ -180,11 +180,15 @@ C:.
 │   │   ├───gateways
 │   │   │   └───freterapido
 │   │   │           freterapido_adapter.go
+│   │   │           freterapido_adapter_test.go
 │   │   │           freterapido_constants.go
 │   │   │           freterapido_gateway.go
+│   │   │           freterapido_gateway_test.go
+│   │   │           freterapido_mock_test.go
 │   │   │
 │   │   ├───http
 │   │   │   │   router.go
+│   │   │   │   router_test.go
 │   │   │   │
 │   │   │   ├───dtos
 │   │   │   │       metrics_response.go
@@ -193,18 +197,26 @@ C:.
 │   │   │   │
 │   │   │   ├───handlers
 │   │   │   │       metrics_handler.go
+│   │   │   │       metrics_handler_test.go
+│   │   │   │       mock_handler_test.go
 │   │   │   │       quote_handler.go
+│   │   │   │       quote_handler_test.go
 │   │   │   │
 │   │   │   └───mappers
 │   │   │           metrics_http_mapper.go
+│   │   │           metrics_http_mapper_test.go
 │   │   │           quote_http_mapper.go
+│   │   │           quote_http_mapper_test.go
 │   │   │
 │   │   └───repositories
 │   │       │   repository.go
+│   │       │   repository_test.go
 │   │       │
 │   │       ├───mappers
 │   │       │       metrics_repository_mapper.go
+│   │       │       metrics_repository_mapper_test.go
 │   │       │       quote_repository_mapper.go
+│   │       │       quote_repository_mapper_test.go
 │   │       │
 │   │       ├───migrations
 │   │       │       quote_migrations.go
@@ -214,13 +226,19 @@ C:.
 │   │       │
 │   │       └───postgres
 │   │               metrics_repository.go
+│   │               metrics_repository_test.go
+│   │               mock_repository_test.go
 │   │               quote_repository.go
+│   │               quote_repository_test.go
 │   │
 │   ├───config
 │   │       config.go
-│   │       contstants.go
+│   │       constants.go
 │   │       database.go
+│   │       database_mock_test.go
+│   │       database_test.go
 │   │       env.go
+│   │       env_test.go
 │   │
 │   ├───domain
 │   │   ├───entity
@@ -234,28 +252,40 @@ C:.
 │   │
 │   └───usecase
 │       ├───metrics
+│       │       metrics_mock_test.go
 │       │       metrics_output.go
 │       │       metrics_usecase.go
+│       │       metrics_usecase_test.go
 │       │
 │       └───quote
 │               quote_input.go
+│               quote_mock_test.go
 │               quote_output.go
 │               quote_usecase.go
+│               quote_usecase_test.go
 │
 └───pkg
     ├───freteRapidoApi
     │       api_error.go
+    │       api_error_test.go
     │       client.go
+    │       client_test.go
     │       constants.go
-    │       cotacao_v3.go
+    │       freteRapidoApi_mock_test.go
     │       http_client.go
+    │       http_client_test.go
     │       models.go
+    │       quote_v3.go
+    │       quote_v3_test.go
     │
     └───httpx
             app_error.go
+            app_error_test.go
             factory.go
+            factory_test.go
             response.go
             result.go
+            result_test.go
 ```
 
 ---
