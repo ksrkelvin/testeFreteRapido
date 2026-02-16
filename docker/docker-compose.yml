@@ -1,0 +1,40 @@
+name: teste-frete-rapido
+services:
+  postgres:
+    image: postgres:18
+    container_name: frete-rapido-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: testeFreteRapido
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: frete-rapido-api
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_CONN_URL: postgresql://postgres:postgres@postgres:5432/testeFreteRapido
+      FRETE_RAPIDO_API_AUTH_TOKEN: auth_token_frete_rapido_api
+      FRETE_RAPIDO_API_PLATAFORM_CODE: plataform_code_frete_rapido_api
+      REGISTERED_NUMBER: 25438296000158
+    ports:
+      - "8080:8080"
+    command: ["./app"]
+
+volumes:
+  postgres_data:
