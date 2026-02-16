@@ -15,27 +15,33 @@ func TestLoad(t *testing.T) {
 	}{
 		{
 			name:          "sucesso com todas variáveis definidas",
-			env:           map[string]string{"DB_CONN_URL": "postgres://user:pass@localhost/db", "FRETE_RAPIDO_API_AUTH_TOKEN": "token", "FRETE_RAPIDO_API_PLATAFORM_CODE": "123"},
+			env:           map[string]string{"DB_CONN_URL": "postgres://user:pass@localhost/db", "FRETE_RAPIDO_API_AUTH_TOKEN": "token", "FRETE_RAPIDO_API_PLATAFORM_CODE": "123", "REGISTERED_NUMBER": "25438296000158"},
 			wantErr:       false,
 			expectedError: "",
 		},
 		{
 			name:          "erro quando DB_CONN_URL ausente",
-			env:           map[string]string{"FRETE_RAPIDO_API_AUTH_TOKEN": "token", "FRETE_RAPIDO_API_PLATAFORM_CODE": "123"},
+			env:           map[string]string{"FRETE_RAPIDO_API_AUTH_TOKEN": "token", "FRETE_RAPIDO_API_PLATAFORM_CODE": "123", "REGISTERED_NUMBER": "25438296000158"},
 			wantErr:       true,
 			expectedError: "DB_CONN_URL is required",
 		},
 		{
 			name:          "erro quando AuthToken ausente",
-			env:           map[string]string{"DB_CONN_URL": "postgres://user:pass@localhost/db", "FRETE_RAPIDO_API_PLATAFORM_CODE": "123"},
+			env:           map[string]string{"DB_CONN_URL": "postgres://user:pass@localhost/db", "FRETE_RAPIDO_API_PLATAFORM_CODE": "123", "REGISTERED_NUMBER": "25438296000158"},
 			wantErr:       true,
 			expectedError: "FRETE_RAPIDO_API_AUTH_TOKEN is required",
 		},
 		{
 			name:          "erro quando PlataformCode ausente",
-			env:           map[string]string{"DB_CONN_URL": "postgres://user:pass@localhost/db", "FRETE_RAPIDO_API_AUTH_TOKEN": "token"},
+			env:           map[string]string{"DB_CONN_URL": "postgres://user:pass@localhost/db", "FRETE_RAPIDO_API_AUTH_TOKEN": "token", "REGISTERED_NUMBER": "25438296000158"},
 			wantErr:       true,
 			expectedError: "FRETE_RAPIDO_API_PLATAFORM_CODE is required",
+		},
+		{
+			name:          "erro quando RegisteredNumber ausente",
+			env:           map[string]string{"DB_CONN_URL": "postgres://user:pass@localhost/db", "FRETE_RAPIDO_API_AUTH_TOKEN": "token", "FRETE_RAPIDO_API_PLATAFORM_CODE": "123"},
+			wantErr:       true,
+			expectedError: "REGISTERED_NUMBER is required",
 		},
 	}
 
@@ -44,7 +50,7 @@ func TestLoad(t *testing.T) {
 			os.Unsetenv("DB_CONN_URL")
 			os.Unsetenv("FRETE_RAPIDO_API_AUTH_TOKEN")
 			os.Unsetenv("FRETE_RAPIDO_API_PLATAFORM_CODE")
-
+			os.Unsetenv("REGISTERED_NUMBER")
 			for k, v := range tt.env {
 				os.Setenv(k, v)
 			}
@@ -63,9 +69,10 @@ func TestLoad(t *testing.T) {
 			if err != nil {
 				t.Fatalf("erro inesperado: %v", err)
 			}
-			if got.DBConnURL != tt.env["DB_CONN_URL"] ||
-				got.AuthToken != tt.env["FRETE_RAPIDO_API_AUTH_TOKEN"] ||
-				got.PlataformCode != tt.env["FRETE_RAPIDO_API_PLATAFORM_CODE"] {
+			if got.GetDBConnURL() != tt.env["DB_CONN_URL"] ||
+				got.GetAuthToken() != tt.env["FRETE_RAPIDO_API_AUTH_TOKEN"] ||
+				got.GetPlataformCode() != tt.env["FRETE_RAPIDO_API_PLATAFORM_CODE"] ||
+				got.GetRegisteredNumber() != tt.env["REGISTERED_NUMBER"] {
 				t.Errorf("config carregada incorreta: %+v", got)
 			}
 		})

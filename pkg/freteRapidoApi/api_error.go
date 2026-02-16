@@ -8,7 +8,7 @@ type APIError struct {
 }
 
 func (e *APIError) Error() string {
-	return fmt.Sprintf("frete rapido api error (%d): %s", e.StatusCode, e.Message)
+	return fmt.Sprintf("Frete rapido api error (%d): %s", e.StatusCode, e.Message)
 }
 
 var errorByStatus = map[int]string{

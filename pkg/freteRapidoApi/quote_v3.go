@@ -3,6 +3,7 @@ package freteRapidoApi
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 )
 
 func (c *Client) QuoteV3(
@@ -28,6 +29,8 @@ func (c *Client) QuoteV3(
 		"Content-Type": "application/json",
 		"Accept":       "application/json",
 	}
+
+	fmt.Printf("Request payload: %s\n", string(payload))
 
 	body, status, err := c.HTTP.Post(ctx, QUOTE_V3_PATH, headers, payload)
 	if err != nil {

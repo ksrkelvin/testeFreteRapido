@@ -2,6 +2,7 @@ package freteRapidoApi_test
 
 import (
 	"context"
+	"errors"
 	"reflect"
 	"testeFreteRapido/pkg/freteRapidoApi"
 	"testing"
@@ -132,6 +133,28 @@ func TestClient_QuoteV3(t *testing.T) {
 				},
 			},
 			wantErr: false,
+		},
+		{
+			name:       "error when status is not 200",
+			mockResp:   []byte(`{"error": "invalid request"}`),
+			mockStatus: 400,
+			mockErr:    nil,
+			recipient: freteRapidoApi.Recipient{
+				Zipcode: 01311000,
+			},
+			dispatchers: []freteRapidoApi.DispatcherRequest{},
+			want:        freteRapidoApi.ResponseCotacaoFreteV3{},
+			wantErr:     true,
+		},
+		{
+			name:        "error on HTTP Post",
+			mockResp:    nil,
+			mockStatus:  0,
+			mockErr:     errors.New("network error"),
+			recipient:   freteRapidoApi.Recipient{Zipcode: 01311000},
+			dispatchers: []freteRapidoApi.DispatcherRequest{},
+			want:        freteRapidoApi.ResponseCotacaoFreteV3{},
+			wantErr:     true,
 		},
 	}
 

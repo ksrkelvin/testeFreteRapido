@@ -3,41 +3,58 @@ package config_test
 import (
 	"testeFreteRapido/internal/config"
 	"testing"
+	"time"
 )
 
-func TestNewDatabase(t *testing.T) {
+func TestNewDatabaseWithMockDriver(t *testing.T) {
 	tests := []struct {
 		name    string
 		cfg     *config.Config
+		dbConn  config.DBConn
 		wantErr bool
 	}{
 		{
-			name:    "erro quando DBConnURL vazio",
+			name:    "DBConnURL vazio",
 			cfg:     &config.Config{DBConnURL: ""},
+			dbConn:  mockDriverSuccess,
 			wantErr: true,
 		},
 		{
-			name:    "erro quando conexão falha",
-			cfg:     &config.Config{DBConnURL: "postgres://invalid:5432/db"},
+			name:    "falha na conexão (driver retorna erro)",
+			cfg:     &config.Config{DBConnURL: "dummy"},
+			dbConn:  mockDriverFail,
 			wantErr: true,
+		},
+		{
+			name:    "sucesso",
+			cfg:     &config.Config{DBConnURL: "dummy"},
+			dbConn:  mockDriverSuccess,
+			wantErr: false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := config.NewDatabase(tt.cfg)
+			start := time.Now()
+			db, err := tt.cfg.NewDatabase(tt.dbConn)
+			duration := time.Since(start)
+
 			if tt.wantErr {
 				if err == nil {
 					t.Fatal("esperado erro, obteve nil")
 				}
 				return
 			}
+
 			if err != nil {
 				t.Fatalf("erro inesperado: %v", err)
 			}
-			if got == nil {
+
+			if db == nil {
 				t.Fatal("esperado gorm.DB, obteve nil")
 			}
+
+			t.Logf("teste executado em %v", duration)
 		})
 	}
 }

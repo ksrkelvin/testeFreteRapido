@@ -9,30 +9,31 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func NewDatabase(cfg *Config) (*gorm.DB, error) {
-	if cfg.DBConnURL == "" {
+func (c *Config) NewDatabase(dbCon DBConn) (*gorm.DB, error) {
+	if c.DBConnURL == "" {
 		return nil, fmt.Errorf("DB_CONN_URL is empty")
+	}
+
+	if dbCon == nil {
+		dbCon = func(dsn string, cfg *gorm.Config) (*gorm.DB, error) {
+			return gorm.Open(postgres.Open(dsn), cfg)
+		}
 	}
 
 	var db *gorm.DB
 	var err error
-
 	const maxRetries = 5
 	const retryInterval = 3 * time.Second
 
 	for i := 0; i < maxRetries; i++ {
-		db, err = gorm.Open(postgres.Open(cfg.DBConnURL), &gorm.Config{
-			Logger: logger.Default.LogMode(logger.Silent),
-		})
+		db, err = dbCon(c.DBConnURL, &gorm.Config{Logger: logger.Default.LogMode(logger.Silent)})
 		if err != nil {
-			fmt.Printf("Attempt %d/%d: failed to connect database: %v\n", i+1, maxRetries, err)
 			time.Sleep(retryInterval)
 			continue
 		}
 
 		sqlDB, err := db.DB()
 		if err != nil {
-			fmt.Printf("Attempt %d/%d: failed to get sql.DB from gorm: %v\n", i+1, maxRetries, err)
 			time.Sleep(retryInterval)
 			continue
 		}
@@ -42,7 +43,6 @@ func NewDatabase(cfg *Config) (*gorm.DB, error) {
 		sqlDB.SetConnMaxLifetime(5 * time.Minute)
 
 		if err := sqlDB.Ping(); err != nil {
-			fmt.Printf("Attempt %d/%d: database ping failed: %v\n", i+1, maxRetries, err)
 			time.Sleep(retryInterval)
 			continue
 		}
@@ -50,5 +50,5 @@ func NewDatabase(cfg *Config) (*gorm.DB, error) {
 		return db, nil
 	}
 
-	return nil, fmt.Errorf("all %d attempts to connect to database failed: last error: %w", maxRetries, err)
+	return nil, fmt.Errorf("all attempts to connect to database failed: last error: %w", err)
 }

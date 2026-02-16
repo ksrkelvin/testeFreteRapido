@@ -44,3 +44,33 @@ func TestNewClient(t *testing.T) {
 		})
 	}
 }
+
+func TestClient_GetRegisteredNumber(t *testing.T) {
+	tests := []struct {
+		name             string
+		authToken        string
+		platformCode     string
+		registeredNumber string
+		want             string
+	}{
+		{
+			name:             "Get registered number",
+			authToken:        "TOKEN",
+			platformCode:     "PLATFORM_CODE",
+			registeredNumber: "123456789",
+			want:             "123456789",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c, err := freteRapidoApi.NewClient(tt.authToken, tt.platformCode, tt.registeredNumber)
+			if err != nil {
+				t.Fatalf("could not construct receiver type: %v", err)
+			}
+			got := c.GetRegisteredNumber()
+			if got != tt.want {
+				t.Errorf("GetRegisteredNumber() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -14,30 +14,40 @@ import (
 	"testeFreteRapido/pkg/freteRapidoApi"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func main() {
-	r := gin.Default()
 
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	db, err := config.NewDatabase(cfg)
+	db, err := cfg.NewDatabase(nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	r.SetTrustedProxies(nil)
-
 	migrations.Migrate(db)
+
+	r, err := setupServer(cfg, db)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func setupServer(cfg config.AppProvider, db *gorm.DB) (r *gin.Engine, err error) {
+	r = gin.Default()
 
 	repo := repositories.NewRepository(db)
 
-	freteClient, err := freteRapidoApi.NewClient(cfg.AuthToken, cfg.PlataformCode, cfg.RegisteredNumber)
+	freteClient, err := freteRapidoApi.NewClient(cfg.GetAuthToken(), cfg.GetPlataformCode(), cfg.GetRegisteredNumber())
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	freteGateway := freterapido.NewFreteGateway(freteClient)
@@ -50,7 +60,5 @@ func main() {
 
 	http.RegisterRoutes(r, quoteHandler, metricsHandler)
 
-	if err := r.Run(":8080"); err != nil {
-		log.Fatal(err)
-	}
+	return r, nil
 }

@@ -1,5 +1,3 @@
-version: "3.9"
-
 name: teste-frete-rapido
 services:
   postgres:
@@ -33,6 +31,7 @@ services:
       DB_CONN_URL: postgresql://postgres:postgres@postgres:5432/testeFreteRapido
       FRETE_RAPIDO_API_AUTH_TOKEN: auth_token_frete_rapido_api
       FRETE_RAPIDO_API_PLATAFORM_CODE: plataform_code_frete_rapido_api
+      REGISTERED_NUMBER: 25438296000158
     ports:
       - "8080:8080"
     command: ["./app"]
