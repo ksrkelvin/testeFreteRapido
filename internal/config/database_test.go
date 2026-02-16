@@ -4,6 +4,8 @@ import (
 	"testeFreteRapido/internal/config"
 	"testing"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 func TestNewDatabaseWithMockDriver(t *testing.T) {
@@ -26,8 +28,12 @@ func TestNewDatabaseWithMockDriver(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name:    "sucesso",
-			cfg:     &config.Config{DBConnURL: "dummy"},
+			name: "sucesso",
+			cfg: &config.Config{
+				DBConnURL: "dummy",
+				MigrateDB: func(db *gorm.DB) {
+				},
+			},
 			dbConn:  mockDriverSuccess,
 			wantErr: false,
 		},

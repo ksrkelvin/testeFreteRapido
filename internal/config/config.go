@@ -7,6 +7,7 @@ type Config struct {
 	AuthToken        string
 	PlataformCode    string
 	RegisteredNumber string
+	MigrateDB        func(db *gorm.DB)
 }
 
 func (c *Config) GetDBConnURL() string        { return c.DBConnURL }

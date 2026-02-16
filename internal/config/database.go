@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"testeFreteRapido/internal/adapter/repositories/migrations"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -47,8 +48,18 @@ func (c *Config) NewDatabase(dbCon DBConn) (*gorm.DB, error) {
 			continue
 		}
 
+		c.MigrateDatabase(db)
+
 		return db, nil
 	}
 
 	return nil, fmt.Errorf("all attempts to connect to database failed: last error: %w", err)
+}
+
+func (c *Config) MigrateDatabase(db *gorm.DB) {
+	if c.MigrateDB != nil {
+		c.MigrateDB(db)
+		return
+	}
+	migrations.Migrate(db)
 }

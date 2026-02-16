@@ -1,13 +1,13 @@
 package main
 
 import (
+	"errors"
 	"log"
 
 	"testeFreteRapido/internal/adapter/gateways/freterapido"
 	"testeFreteRapido/internal/adapter/http"
 	"testeFreteRapido/internal/adapter/http/handlers"
 	"testeFreteRapido/internal/adapter/repositories"
-	"testeFreteRapido/internal/adapter/repositories/migrations"
 	"testeFreteRapido/internal/config"
 	"testeFreteRapido/internal/usecase/metrics"
 	"testeFreteRapido/internal/usecase/quote"
@@ -29,8 +29,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	migrations.Migrate(db)
-
 	r, err := setupServer(cfg, db)
 	if err != nil {
 		log.Fatal(err)
@@ -42,6 +40,10 @@ func main() {
 
 func setupServer(cfg config.AppProvider, db *gorm.DB) (r *gin.Engine, err error) {
 	r = gin.Default()
+
+	if db == nil {
+		return nil, errors.New("db is nil")
+	}
 
 	repo := repositories.NewRepository(db)
 
