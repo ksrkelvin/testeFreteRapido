@@ -1,4 +1,7 @@
 # testeFreteRapido
+![Coverage](https://img.shields.io/badge/coverage-91%25-brightgreen)
+![Go Version](https://img.shields.io/badge/go-1.21-blue)
+
 Teste técnico para empresa Frete Rápido
 # FreteRápido 🚛
 
@@ -142,9 +145,13 @@ REGISTERED_NUMBER = 25438296000158
 ---
 ### 2️⃣ Build & Run
 
-Primeiramente é necessário atribuir as variaveis de ambiente no arquivo docker/docker-compose.yml:
-      FRETE_RAPIDO_API_AUTH_TOKEN
-      FRETE_RAPIDO_API_PLATAFORM_CODE
+#### ⚠️ Primeiramente é necessário atribuir as variaveis de ambiente no arquivo docker/docker-compose.
+
+```yml
+      FRETE_RAPIDO_API_AUTH_TOKEN: auth_token_frete_rapido_api
+      FRETE_RAPIDO_API_PLATAFORM_CODE: plataform_code_frete_rapido_api
+```
+
 Após isso executar o comando abaixo a partir da pasta raiz do projeto 
 
 ```bash
